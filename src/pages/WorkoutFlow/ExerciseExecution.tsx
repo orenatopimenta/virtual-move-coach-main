@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import FormFitHeader from '@/components/FormFitHeader';
@@ -53,12 +52,18 @@ const ExerciseExecution: React.FC = () => {
   useEffect(() => {
     const exerciseData = localStorage.getItem("currentExercise");
     if (exerciseData) {
-      setExercise(JSON.parse(exerciseData));
+      const parsedData = JSON.parse(exerciseData);
+      // Ensure the exercise ID is normalized
+      const normalizedId = parsedData.id.toLowerCase().replace(/\s+/g, '');
+      setExercise({
+        ...parsedData,
+        id: normalizedId
+      });
     } else {
       // Fallback to URL parameter
-      // In a real app, you'd fetch the exercise data from an API
+      const normalizedId = exerciseId.toLowerCase().replace(/\s+/g, '');
       setExercise({
-        id: exerciseId,
+        id: normalizedId,
         name: "Exercício",
         muscles: ""
       });
@@ -267,10 +272,12 @@ const ExerciseExecution: React.FC = () => {
       "sumo": "pernas",
       "calf": "pernas",
       "pushup": "peito",
+      "flexao": "peito",
       "dips": "peito",
       "incline": "peito",
       "flyes": "peito",
       "row": "costas",
+      "remada": "costas",
       "pullup": "costas",
       "superman": "costas",
       "latpull": "costas",
@@ -279,16 +286,21 @@ const ExerciseExecution: React.FC = () => {
       "shrugs": "ombro",
       "circle": "ombro",
       "curl": "braco",
+      "roscabiceps": "braco",
       "hammer": "braco",
       "tricepsext": "braco",
       "kickback": "braco",
       "crunch": "abdomen",
+      "abdominal": "abdomen",
       "plank": "abdomen",
+      "prancha": "abdomen",
       "legrise": "abdomen",
-      "bicycle": "abdomen",
+      "bicycle": "abdomen"
     };
     
-    return mapping[exerciseId] || "";
+    // Normalize the exercise ID before lookup
+    const normalizedId = exerciseId.toLowerCase().replace(/\s+/g, '');
+    return mapping[normalizedId] || "";
   };
   
   const handleFinishWorkout = () => {

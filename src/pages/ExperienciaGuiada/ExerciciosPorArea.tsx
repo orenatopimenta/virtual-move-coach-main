@@ -109,15 +109,18 @@ const ExerciciosPorArea: React.FC = () => {
 
   // Function to handle exercise click - directly go to workout execution
   const handleExerciseClick = (exerciseId: string) => {
-    // Store the exercise ID for the workout page
+    // Normalize exercise ID to match exercise-configs
+    const normalizedId = exerciseId.toLowerCase().replace(/\s+/g, '');
+    
+    // Store the exercise data for the workout page
     localStorage.setItem("currentExercise", JSON.stringify({
-      id: exerciseId,
+      id: normalizedId,
       name: currentExercises.find(ex => ex.id === exerciseId)?.name || "Exercício",
       muscles: areaId || ""
     }));
     
-    // Navigate directly to the workout execution page
-    navigate(`/workout/exercise/${exerciseId}`);
+    // Navigate to the workout flow execution page
+    navigate(`/workout-flow/execution`);
   };
 
   return (
